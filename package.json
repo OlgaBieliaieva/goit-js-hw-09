@@ -1,15 +1,15 @@
 {
-  "name": "goit-js-hw-08",
+  "name": "goit-js-hw-09",
   "version": "1.0.0",
-  "description": "my homework #8",
-  "homepage": "https://olgabieliaieva.github.io/goit-js-hw-08",
+  "description": "my homework #9",
+  "homepage": "https://olgabieliaieva.github.io/goit-js-hw-09",
   "scripts": {
     "start": "parcel src/*.html",
-    "build": "parcel build src/*.html --public-url /goit-js-hw-08/"
+    "build": "parcel build src/*.html --public-url /goit-js-hw-09/"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/OlgaBieliaieva/goit-js-hw-08"
+    "url": "git+https://github.com/OlgaBieliaieva/goit-js-hw-09"
   },
   "keywords": [],
   "author": "Olga Bieliaieva",
