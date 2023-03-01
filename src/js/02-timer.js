@@ -22,9 +22,9 @@ const options = {
 const refs = {
   dateInput: document.querySelector('input'),
   setDateBtn: document.querySelector('button'),
-  timer: document.querySelector('.timer'),
+  timer: document.querySelector('.timer[data-days]'),
 };
-
+console.log(refs.timer);
 refs.setDateBtn.setAttribute('disabled', true);
 refs.setDateBtn.addEventListener('click', onStartBtnClick);
 
