@@ -1,6 +1,5 @@
 import flatpickr from 'flatpickr';
 import 'flatpickr/dist/flatpickr.min.css';
-flatpickr('#datetime-picker', options);
 
 const options = {
   enableTime: true,
@@ -11,7 +10,6 @@ const options = {
     console.log(selectedDates[0]);
 
     if (selectedDates[0] < Date.now()) {
-      console.log(selectedDates);
       return alert('Please choose a date in the future');
     } else {
       refs.setDateBtn.removeAttribute('disabled');
@@ -19,37 +17,61 @@ const options = {
   },
 };
 
+flatpickr('#datetime-picker', options);
+
+let intervalId = null;
+
 const refs = {
   dateInput: document.querySelector('input'),
   setDateBtn: document.querySelector('button'),
-  timer: document.querySelector('.timer[data-days]'),
+  timer: {
+    days: document.querySelector('.value[data-days]'),
+    hours: document.querySelector('.value[data-hours]'),
+    minutes: document.querySelector('.value[data-minutes]'),
+    seconds: document.querySelector('.value[data-seconds]'),
+  },
 };
-console.log(refs.timer);
+
 refs.setDateBtn.setAttribute('disabled', true);
 refs.setDateBtn.addEventListener('click', onStartBtnClick);
 
-function onStartBtnClick(e) {
+function onStartBtnClick() {
   const finishTime = new Date(`${refs.dateInput.value}`);
-  const timeLeft = finishTime - Date.now();
 
-  console.log(Date.now());
-  console.log(timeLeft);
-  convertMs(timeLeft);
-  //   createMarkup({ days, hours, minutes, seconds });
+  intervalId = setInterval(() => {
+    const currentTime = Date.now();
+    const timeLeft = finishTime - currentTime;
+
+    if (timeLeft < 1000) {
+      onStopTimer(intervalId);
+    }
+    convertMs(timeLeft);
+  }, 1000);
 }
 
-function createMarkup({ days, hours, minutes, seconds }) {
-  console.log(days, hours, minutes, seconds);
+function createMarkup(days, hours, minutes, seconds) {
+  refs.timer.days.textContent = days;
+  refs.timer.hours.textContent = hours;
+  refs.timer.minutes.textContent = minutes;
+  refs.timer.seconds.textContent = seconds;
 }
 
-function addLeadingZero(value) {
-  if (value.length < 2) {
-    return value.padStart(2, '0');
-  }
+function onStopTimer(intervalId) {
+  clearInterval(intervalId);
+}
+
+function addLeadingZero({ ...value }) {
+  const values = Object.values(value);
+  const formattedValues = values.map(value =>
+    String(value).length < 2 ? String(value).padStart(2, '0') : String(value)
+  );
+
+  createMarkup(...formattedValues);
 }
 
 function convertMs(ms) {
   // Number of milliseconds per unit of time
+
   const second = 1000;
   const minute = second * 60;
   const hour = minute * 60;
@@ -64,6 +86,5 @@ function convertMs(ms) {
   // Remaining seconds
   const seconds = Math.floor((((ms % day) % hour) % minute) / second);
 
-  createMarkup({ days, hours, minutes, seconds });
-  //   console.log({ days, hours, minutes, seconds });
+  addLeadingZero({ days, hours, minutes, seconds });
 }
