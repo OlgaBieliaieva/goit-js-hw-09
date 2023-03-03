@@ -1,5 +1,6 @@
 import flatpickr from 'flatpickr';
 import 'flatpickr/dist/flatpickr.min.css';
+import { Notify } from 'notiflix/build/notiflix-notify-aio';
 
 const options = {
   enableTime: true,
@@ -10,7 +11,7 @@ const options = {
     console.log(selectedDates[0]);
 
     if (selectedDates[0] < Date.now()) {
-      return alert('Please choose a date in the future');
+      return Notify.failure('Please choose a date in the future');
     } else {
       refs.setDateBtn.removeAttribute('disabled');
     }
@@ -18,8 +19,6 @@ const options = {
 };
 
 flatpickr('#datetime-picker', options);
-
-let intervalId = null;
 
 const refs = {
   dateInput: document.querySelector('input'),
@@ -35,6 +34,8 @@ const refs = {
 refs.setDateBtn.setAttribute('disabled', true);
 refs.setDateBtn.addEventListener('click', onStartBtnClick);
 
+let intervalId = null;
+
 function onStartBtnClick() {
   const finishTime = new Date(`${refs.dateInput.value}`);
 
@@ -49,15 +50,15 @@ function onStartBtnClick() {
   }, 1000);
 }
 
+function onStopTimer(intervalId) {
+  clearInterval(intervalId);
+}
+
 function createMarkup(days, hours, minutes, seconds) {
   refs.timer.days.textContent = days;
   refs.timer.hours.textContent = hours;
   refs.timer.minutes.textContent = minutes;
   refs.timer.seconds.textContent = seconds;
-}
-
-function onStopTimer(intervalId) {
-  clearInterval(intervalId);
 }
 
 function addLeadingZero({ ...value }) {
